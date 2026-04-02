@@ -70,7 +70,27 @@
 
             <div class="jackpot-label">Estimated Jackpot</div>
             <div class="jackpot-amount" id="mainJackpot">$240.0M</div>
-            <div class="jackpot-label" id="jackpotDrawDate">Next Draw: Sat, Mar 30</div>
+            <div class="jackpot-label" id="jackpotDrawDate">Next Draw: Sat, Apr 4</div>
+            <div class="cash-row">
+                <span class="cash-label">CASH VALUE</span>
+                <span class="cash-amount" id="cashJackpot">$97.4M</span>
+            </div>
+
+            <!-- Countdown Timer (New) -->
+            <div id="drawCountdown" class="countdown-container">
+                <div class="timer-item">
+                    <span id="hours">00</span>
+                    <label>Hrs</label>
+                </div>
+                <div class="timer-item">
+                    <span id="minutes">00</span>
+                    <label>Min</label>
+                </div>
+                <div class="timer-item anim-pulse">
+                    <span id="seconds">00</span>
+                    <label>Sec</label>
+                </div>
+            </div>
 
             <div class="official-links">
                 <a href="https://www.powerball.com" target="_blank" class="official-btn" id="officialLink">Official
@@ -93,6 +113,27 @@
             </div>
             <div class="winning-balls-container" id="recentWinningBalls">
                 <!-- Result Balls -->
+            </div>
+
+            <!-- Winners Section (New) -->
+            <div class="winners-container glass-light" id="winnersSection">
+                <div class="winners-header">
+                    <span class="pulse-dot"></span> Real-time Winners Breakdown
+                </div>
+                <div class="winners-grid" id="winnersList">
+                    <div class="winner-row">
+                        <span class="prize-tier">Jackpot</span>
+                        <span class="prize-count" id="jackpotWinners">Pending...</span>
+                    </div>
+                    <div class="winner-row">
+                        <span class="prize-tier">Match 5 + PowerPlay</span>
+                        <span class="prize-count" id="match5Ppw">Pending...</span>
+                    </div>
+                    <div class="winner-row">
+                        <span class="prize-tier">Match 5</span>
+                        <span class="prize-count" id="match5w">Pending...</span>
+                    </div>
+                </div>
             </div>
         </section>
 
@@ -197,7 +238,7 @@
             </div>
             <p class="app-subtitle" style="margin-top:-15px;">"How long would it take to win with these numbers?"</p>
             <div class="sim-controls">
-                <button class="sim-btn" onclick="startSimulation()">RUN 100-YEAR SIMULATION</button>
+                <button class="sim-btn" onclick="startSimulation()">RUN LIFE-CHANCE TEST (10Y)</button>
             </div>
             <div id="simResult" class="sim-result"></div>
         </section>

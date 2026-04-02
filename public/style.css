@@ -147,6 +147,20 @@ body {
 }
 
 /* Jackpot Board */
+body {
+    transition: background 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Powerball Body Theme */
+body.power-theme {
+    background: radial-gradient(circle at 50% -20%, #2a0505 0%, #0a0a0f 80%) fixed;
+}
+
+/* Mega Millions Body Theme */
+body.mega-theme {
+    background: radial-gradient(circle at 50% -20%, #00122e 0%, #0a0a0f 80%) fixed;
+}
+
 .jackpot-board {
     margin-bottom: 30px;
     padding: 25px;
@@ -154,17 +168,31 @@ body {
     position: relative;
     overflow: hidden;
     animation: slideUp 0.7s ease 0.1s both;
+    transition: all 0.5s ease;
+    border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
-.jackpot-board::before {
-    content: '';
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: radial-gradient(circle, rgba(255, 215, 0, 0.05) 0%, transparent 70%);
-    pointer-events: none;
+/* Theme Overrides on Board */
+.power-theme .jackpot-board {
+    background: rgba(42, 5, 5, 0.4);
+    border-color: rgba(232, 17, 35, 0.4);
+    box-shadow: 0 0 40px rgba(232, 17, 35, 0.15);
+}
+
+.mega-theme .jackpot-board {
+    background: rgba(0, 18, 46, 0.5);
+    border-color: rgba(0, 45, 98, 0.6);
+    box-shadow: 0 0 40px rgba(0, 45, 98, 0.3);
+}
+
+.power-theme .jackpot-amount {
+    color: #FFF;
+    text-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+}
+
+.mega-theme .jackpot-amount {
+    color: #FFD700;
+    text-shadow: 0 0 25px rgba(255, 215, 0, 0.4);
 }
 
 .lotto-type-selector {
@@ -172,24 +200,27 @@ body {
     background: rgba(0, 0, 0, 0.3);
     border-radius: 100px;
     padding: 5px;
-    margin-bottom: 20px;
+    margin-bottom: 25px;
     position: relative;
+    border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .lotto-toggle {
     flex: 1;
-    padding: 10px;
+    padding: 12px;
     border: none;
     background: none;
     color: var(--text-dim);
-    font-weight: 600;
+    font-weight: 700;
     cursor: pointer;
     z-index: 1;
     transition: var(--transition-smooth);
+    font-size: 0.85rem;
+    letter-spacing: 1px;
 }
 
 .lotto-toggle.active {
-    color: #000;
+    color: #FFF !important;
 }
 
 .toggle-slider {
@@ -198,21 +229,25 @@ body {
     left: 5px;
     width: calc(50% - 5px);
     height: calc(100% - 10px);
-    background: var(--primary-gold);
+    background: var(--powerball-red);
     border-radius: 100px;
-    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), background 0.4s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
 }
 
 .lotto-toggle[data-type="mega"].active~.toggle-slider {
     transform: translateX(100%);
+    background: #FFD700;
+}
+
+.lotto-toggle[data-type="mega"].active {
+    color: #000 !important;
 }
 
 .jackpot-amount {
-    font-size: 2.8rem;
-    font-weight: 800;
-    color: var(--primary-gold);
-    text-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
-    margin: 10px 0;
+    font-size: 3.2rem;
+    font-weight: 900;
+    margin: 15px 0;
 }
 
 .jackpot-label {
@@ -278,11 +313,13 @@ body {
 .ball.special {
     background: radial-gradient(circle at 30% 30%, #FF5F6D, #E81123);
     color: #FFF;
+    border: none;
 }
 
 .ball.mega {
-    background: radial-gradient(circle at 30% 30%, #4facfe, #002D62);
-    color: #FFF;
+    background: radial-gradient(circle at 30% 30%, #FFD700, #FFA500);
+    color: #000;
+    border: none;
 }
 
 /* Generator Section */
@@ -947,4 +984,131 @@ body {
     .algo-grid {
         grid-template-columns: repeat(2, 1fr);
     }
+}
+
+/* Countdown Timer Styling (Premium Upgrade) */
+.countdown-container {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin: 20px 0;
+    padding: 15px;
+    background: rgba(0, 0, 0, 0.4);
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.5);
+}
+
+.timer-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.timer-item span {
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: #FFF;
+    background: linear-gradient(180deg, #333 0%, #111 100%);
+    padding: 10px 12px;
+    border-radius: 8px;
+    min-width: 55px;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5), inset 0 2px 2px rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    font-family: 'Outfit', sans-serif;
+    line-height: 1;
+}
+
+.timer-item label {
+    font-size: 0.65rem;
+    color: var(--powerball-red);
+    text-transform: uppercase;
+    font-weight: 800;
+    letter-spacing: 1px;
+}
+
+.anim-pulse {
+    animation: pulse-op 1s infinite alternate;
+}
+
+@keyframes pulse-op {
+    from {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 0.5;
+    }
+}
+
+/* Winners Section Styling */
+.winners-container {
+    margin-top: 15px;
+    padding: 15px;
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    text-align: left;
+}
+
+.winners-header {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--text-dim);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.pulse-dot {
+    width: 8px;
+    height: 8px;
+    background: #4caf50;
+    border-radius: 50%;
+    box-shadow: 0 0 10px #4caf50;
+    animation: dot-pulse 1.5s infinite;
+}
+
+@keyframes dot-pulse {
+    0% {
+        transform: scale(0.9);
+        opacity: 0.7;
+    }
+
+    50% {
+        transform: scale(1.2);
+        opacity: 1;
+    }
+
+    100% {
+        transform: scale(0.9);
+        opacity: 0.7;
+    }
+}
+
+.winners-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.winner-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 12px;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 10px;
+    font-size: 0.85rem;
+}
+
+.prize-tier {
+    font-weight: 600;
+}
+
+.prize-count {
+    color: var(--primary-gold);
+    font-weight: 800;
 }
