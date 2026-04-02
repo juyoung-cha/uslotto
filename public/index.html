@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+
+    <!-- SEO Meta Tags -->
+    <title>🎰 US Lotto Master | Powerball & Mega Millions Prediction & Analytics</title>
+    <meta name="description"
+        content="Ultimate US Lottery analysis. Real-time Powerball and Mega Millions winning numbers, hot/cold statistics, and AI-powered jackpot predictors. Monetization ready.">
+    <meta name="keywords"
+        content="US Lotto, Powerball, Mega Millions, Lotto Prediction, Lottery Numbers, Jackpot Stats, Winning Probability, US Lottery Analytics, Auto Crawl Lotto">
+    <meta name="author" content="Jackpot Master">
+
+    <!-- PWA Meta -->
+    <meta name="theme-color" content="#0A0A0F">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="LottoMaster">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="style.css?v=10.0">
+
+    <!-- Google AdSense (Ready for Approval) -->
+    <meta name="google-adsense-account" content="ca-pub-4710326798337072">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4710326798337072"
+        crossorigin="anonymous"></script>
+</head>
+
+<body>
+
+    <div class="app-wrapper">
+        <!-- Banner Section -->
+        <div class="app-banner-area">
+            <div class="banner-overlay"></div>
+            <img src="/banner.png" alt="US Lotto Master Banner" class="hero-banner">
+        </div>
+
+        <!-- Header -->
+
+        <header class="app-header">
+            <div class="logo-container">
+                <span class="logo-icon">💰</span>
+                <h1 class="app-title">US LOTTO <span style="color:var(--primary-gold)">MASTER</span></h1>
+            </div>
+            <p class="app-subtitle">Ultimate Jackpot Analysis & Prediction System</p>
+        </header>
+
+        <!-- Jackpot Indicator & Toggle -->
+        <section class="jackpot-board glass" id="jackpotSection">
+            <div class="trust-indicators">
+                <span class="trust-badge">AI 2.0 Engine</span>
+                <span class="trust-badge">Real-time Data</span>
+                <span class="trust-badge">PWA Installed</span>
+            </div>
+
+            <div class="lotto-type-selector">
+
+                <button class="lotto-toggle active" data-type="power" onclick="switchLotto('power')">POWERBALL</button>
+                <button class="lotto-toggle" data-type="mega" onclick="switchLotto('mega')">MEGA MILLIONS</button>
+                <div class="toggle-slider"></div>
+            </div>
+
+            <div class="jackpot-label">Estimated Jackpot</div>
+            <div class="jackpot-amount" id="mainJackpot">$240.0M</div>
+            <div class="jackpot-label" id="jackpotDrawDate">Next Draw: Sat, Mar 30</div>
+
+            <div class="official-links">
+                <a href="https://www.powerball.com" target="_blank" class="official-btn" id="officialLink">Official
+                    Powerball Website ↗</a>
+            </div>
+        </section>
+
+        <!-- Recent Results -->
+        <section class="recent-card glass">
+            <div class="card-header">
+                <div class="section-title">
+                    <span>🏆</span> Latest Winning Numbers
+                </div>
+                <!-- Round Selector (New) -->
+                <div class="round-picker">
+                    <select id="roundSelector" class="glass-select" onchange="handleRoundChange(this.value)">
+                        <option value="">Choose Round</option>
+                    </select>
+                </div>
+            </div>
+            <div class="winning-balls-container" id="recentWinningBalls">
+                <!-- Result Balls -->
+            </div>
+        </section>
+
+        <!-- Lotto Predictor Section -->
+        <section class="generator-setup glass">
+            <div class="section-title">
+                <span>⚡</span> Lotto Predictor
+            </div>
+
+            <div class="setup-compact-grid">
+                <!-- Games Counter -->
+                <div class="setup-tile">
+                    <label>Games</label>
+                    <div class="slim-counter">
+                        <button onclick="adjustValue('gameCount', -1)">−</button>
+                        <input type="number" id="gameCount" value="5" min="1" max="10" readonly>
+                        <button onclick="adjustValue('gameCount', 1)">+</button>
+                    </div>
+                </div>
+                <!-- Numbers Input -->
+                <div class="setup-tile">
+                    <label>Lucky Numbers</label>
+                    <input type="text" id="luckyNumbers" placeholder="7, 21" class="slim-input">
+                </div>
+                <div class="setup-tile">
+                    <label>Exclude</label>
+                    <input type="text" id="excludeNumbers" placeholder="13, 44" class="slim-input">
+                </div>
+            </div>
+
+            <!-- Strategy Grid (3x2) -->
+            <div class="algo-grid-container">
+                <div class="algo-grid-item active" data-algo="balanced" onclick="selectAlgo('balanced')">⚖️ Balanced
+                </div>
+                <div class="algo-item" data-algo="hot" onclick="selectAlgo('hot')">🔥 Hot Pick</div>
+                <div class="algo-item" data-algo="cold" onclick="selectAlgo('cold')">❄️ Cold Num</div>
+                <div class="algo-item" data-algo="pattern" onclick="selectAlgo('pattern')">📐 Rule Based</div>
+                <div class="algo-item" data-algo="random" onclick="selectAlgo('random')">🎲 Random</div>
+                <div class="algo-item" data-algo="lucky" onclick="selectAlgo('lucky')">✨ Lucky Feel</div>
+            </div>
+
+            <button class="generate-btn-premium" onclick="generateTickets()">⚡ GENERATE TICKETS</button>
+        </section>
+
+        <!-- Generated Results Display -->
+        <section class="results-layout" id="resultsSection">
+            <div class="section-title" id="resultsTitle" style="display:none;">
+                <span>✨</span> Your Lucky Numbers
+            </div>
+            <div class="results-list" id="ticketsResults">
+                <!-- Tickets will be injected here -->
+            </div>
+        </section>
+
+        <!-- Analysis & Statistics Section (New) -->
+        <section class="stats-card glass">
+            <div class="section-title">
+                <span>📈</span> Real-time Statistics
+            </div>
+            <div class="stats-overview">
+                <div class="stat-box">
+                    <div class="stat-label">Odd / Even Ratio</div>
+                    <div class="stat-bar-container">
+                        <div class="stat-bar" id="oddEvenBar" style="width: 50%;"></div>
+                    </div>
+                    <div class="stat-value" id="oddEvenVal">3 : 3</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-label">High / Low Ratio</div>
+                    <div class="stat-bar-container">
+                        <div class="stat-bar" id="highLowBar" style="width: 40%; background: var(--powerball-red);">
+                        </div>
+                    </div>
+                    <div class="stat-value" id="highLowVal">2 : 4</div>
+                </div>
+            </div>
+
+            <div class="freq-chart-container">
+                <div class="label-text">Top 10 Frequency Index</div>
+                <div class="freq-bars" id="freqBars">
+                    <!-- Top 10 bars here -->
+                </div>
+            </div>
+
+            <!-- Full Frequency Analysis (New) -->
+            <div class="full-stats-toggle">
+                <button class="sim-btn" onclick="toggleFullStats()">📊 View All Number Stats</button>
+            </div>
+
+            <div id="fullFreqContainer" class="full-freq-grid" style="display:none;">
+                <p class="app-subtitle" style="text-align:center; margin: 10px 0;">Total Frequency Analysis (1-70)</p>
+                <div class="freq-grid" id="fullFreqGrid">
+                    <!-- 1-70 numbers grid here -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Jackpot Simulator (New) -->
+        <section class="simulator-card glass">
+            <div class="section-title">
+                <span>🏎️</span> Speed Simulator
+            </div>
+            <p class="app-subtitle" style="margin-top:-15px;">"How long would it take to win with these numbers?"</p>
+            <div class="sim-controls">
+                <button class="sim-btn" onclick="startSimulation()">RUN 100-YEAR SIMULATION</button>
+            </div>
+            <div id="simResult" class="sim-result"></div>
+        </section>
+
+        <!-- Simulator area end -->
+
+        <!-- Social Share -->
+        <div class="share-area" style="text-align: center; margin-top: 30px;">
+            <button class="share-btn" onclick="shareApp()">
+                <span>📤 SHARE YOUR LUCK</span>
+            </button>
+        </div>
+
+        <!-- Footer -->
+
+        <footer class="footer">
+            <div class="footer-links">
+                <a href="javascript:void(0)"
+                    onclick="openModal('Terms of Service', 'This application is for entertainment purposes only. The predictions are generated by AI analysis of historical data and do not guarantee any winning results. All users must be at least 18 years of age.')">Terms
+                    of Service</a>
+                <a href="javascript:void(0)"
+                    onclick="openModal('Privacy Policy', 'We value your privacy. This application does not collect, store, or share any personal identifiable information or your selected lucky numbers with third parties.')">Privacy
+                    Policy</a>
+                <a href="mailto:contact@lottomaster.us">Support</a>
+            </div>
+            <div class="disclaimer">
+                <strong>[Disclaimer]</strong><br>
+                Predictions are for entertainment only. No guarantee of winning. Play responsibly. Please check official
+                results twice.
+            </div>
+            <div style="margin-top: 20px; opacity: 0.5;">
+                © 2026 US Lotto Master. All Rights Reserved.
+            </div>
+        </footer>
+    </div>
+
+    <!-- Firebase SDK (Compatible with lotto project) -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script src="firebase-config.js"></script>
+
+    <!-- Main App Script -->
+    <script src="app.js?v=11.7"></script>
+    <!-- Premium Modal Overlay (Card Style) -->
+    <div id="premiumModal" class="modal-overlay"
+        style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); backdrop-filter:blur(12px); z-index:10000; align-items:center; justify-content:center; padding: 20px;">
+        <div class="glass"
+            style="width: 85%; max-width: 400px; padding: 40px 30px; border-radius: 40px; text-align:center; border:1px solid rgba(255,255,255,0.15); box-shadow: 0 30px 60px rgba(0,0,0,0.7);">
+            <h2 id="modalTitle"
+                style="color:var(--primary-gold); margin-bottom:20px; font-weight:800; font-size:1.6rem; letter-spacing: -0.5px;">
+            </h2>
+            <p id="modalText"
+                style="color:rgba(255,255,255,0.85); line-height:1.7; margin-bottom:30px; font-size:1rem; font-weight: 300;">
+            </p>
+            <button onclick="closeModal()"
+                style="background:var(--primary-gold); color:#000; border:none; padding: 15px; border-radius: 50px; font-weight:800; cursor:pointer; width:100%; font-size:1.1rem; box-shadow: 0 10px 20px rgba(255, 215, 0, 0.2); transition: transform 0.2s;">CONFIRMED</button>
+        </div>
+    </div>
+
+    <script>
+        function openModal(title, text) {
+            document.getElementById('modalTitle').textContent = title;
+            document.getElementById('modalText').textContent = text;
+            const modal = document.getElementById('premiumModal');
+            modal.style.display = 'flex';
+        }
+        function closeModal() {
+            document.getElementById('premiumModal').style.display = 'none';
+        }
+    </script>
+</body>
+
+</html>

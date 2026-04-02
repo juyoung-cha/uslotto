@@ -1,0 +1,26 @@
+# Vercel
+.vercel
+
+# Node.js
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Firebase & Secrets (Security Critical)
+serviceAccountKey.json
+service-account.json
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Backups & Data
+backup_*.zip
+backup_*/
+data/
+public/data/
+
+# OS Files
+.DS_Store
+Thumbs.db

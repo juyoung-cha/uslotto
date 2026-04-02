@@ -1,0 +1,950 @@
+:root {
+    /* Color Palette - US Jackpot Premium */
+    --primary-gold: #FFD700;
+    --primary-gold-rgb: 255, 215, 0;
+    --powerball-red: #E81123;
+    --megaball-blue: #002D62;
+    --bg-dark: #0A0A0F;
+    --bg-surface: #14141E;
+    --glass-bg: rgba(255, 255, 255, 0.03);
+    --glass-border: rgba(255, 255, 255, 0.08);
+    --text-primary: #FFFFFF;
+    --text-dim: #A0A0B0;
+    --accent-glow: rgba(255, 215, 0, 0.2);
+
+    /* System Tokens */
+    --radius-lg: 24px;
+    --radius-md: 16px;
+    --shadow-premium: 0 10px 40px rgba(0, 0, 0, 0.5);
+    --transition-smooth: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Base Style */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
+
+body {
+    background-color: var(--bg-dark);
+    color: var(--text-primary);
+    font-family: 'Outfit', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    line-height: 1.6;
+    overflow-x: hidden;
+    min-height: 100vh;
+}
+
+/* Animations */
+@keyframes float {
+    0% {
+        transform: translateY(0px);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
+
+    100% {
+        transform: translateY(0px);
+    }
+}
+
+@keyframes pulse-gold {
+    0% {
+        box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.4);
+    }
+
+    70% {
+        box-shadow: 0 0 20px 10px rgba(255, 215, 0, 0);
+    }
+
+    100% {
+        box-shadow: 0 0 0 0 rgba(255, 215, 0, 0);
+    }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes ballReveal {
+    0% {
+        opacity: 0;
+        transform: scale(0) translateY(30px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+/* Glassmorphism Classes */
+.glass {
+    background: var(--glass-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-lg);
+    padding: 25px;
+    /* Increased internal padding */
+    margin-bottom: 20px;
+}
+
+/* Layout */
+.app-wrapper {
+    max-width: 540px;
+    margin: 0 auto;
+    padding: 30px 15px;
+    padding-top: 50px;
+    box-sizing: border-box;
+}
+
+/* Header */
+.app-header {
+    text-align: center;
+    margin-bottom: 40px;
+    animation: slideUp 0.6s ease;
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 8px;
+}
+
+.logo-icon {
+    font-size: 2.5rem;
+    filter: drop-shadow(0 0 10px var(--primary-gold));
+}
+
+.app-title {
+    font-size: 2rem;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    background: linear-gradient(135deg, #FFF, var(--primary-gold));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.app-subtitle {
+    font-size: 0.95rem;
+    color: var(--text-dim);
+    font-weight: 400;
+}
+
+/* Jackpot Board */
+.jackpot-board {
+    margin-bottom: 30px;
+    padding: 25px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    animation: slideUp 0.7s ease 0.1s both;
+}
+
+.jackpot-board::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255, 215, 0, 0.05) 0%, transparent 70%);
+    pointer-events: none;
+}
+
+.lotto-type-selector {
+    display: flex;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 100px;
+    padding: 5px;
+    margin-bottom: 20px;
+    position: relative;
+}
+
+.lotto-toggle {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    background: none;
+    color: var(--text-dim);
+    font-weight: 600;
+    cursor: pointer;
+    z-index: 1;
+    transition: var(--transition-smooth);
+}
+
+.lotto-toggle.active {
+    color: #000;
+}
+
+.toggle-slider {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    width: calc(50% - 5px);
+    height: calc(100% - 10px);
+    background: var(--primary-gold);
+    border-radius: 100px;
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.lotto-toggle[data-type="mega"].active~.toggle-slider {
+    transform: translateX(100%);
+}
+
+.jackpot-amount {
+    font-size: 2.8rem;
+    font-weight: 800;
+    color: var(--primary-gold);
+    text-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+    margin: 10px 0;
+}
+
+.jackpot-label {
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 2px;
+    color: var(--text-dim);
+}
+
+/* Results Display */
+.draw-info {
+    margin-bottom: 30px;
+    animation: slideUp 0.7s ease 0.2s both;
+}
+
+.winning-balls-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: center;
+    margin: 20px 0;
+}
+
+.balls-container {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 15px;
+    flex-wrap: wrap;
+}
+
+.ball {
+    width: 48px;
+    height: 48px;
+    background: #fff;
+    color: #000;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    font-weight: 800;
+    box-shadow: inset -4px -4px 10px rgba(0, 0, 0, 0.2),
+        4px 4px 12px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    position: relative;
+    opacity: 1;
+    animation: ballReveal 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+.ball::after {
+    content: '';
+    position: absolute;
+    top: 5px;
+    left: 8px;
+    width: 12px;
+    height: 8px;
+    background: rgba(255, 255, 255, 0.6);
+    border-radius: 50%;
+    transform: rotate(-30deg);
+}
+
+.ball.special {
+    background: radial-gradient(circle at 30% 30%, #FF5F6D, #E81123);
+    color: #FFF;
+}
+
+.ball.mega {
+    background: radial-gradient(circle at 30% 30%, #4facfe, #002D62);
+    color: #FFF;
+}
+
+/* Generator Section */
+.generator-card {
+    padding: 30px;
+    margin-bottom: 40px;
+    animation: slideUp 0.7s ease 0.3s both;
+}
+
+.section-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 25px;
+    font-size: 1.25rem;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.input-field {
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-md);
+    padding: 15px;
+}
+
+.label-text {
+    display: block;
+    font-size: 0.8rem;
+    color: var(--text-dim);
+    margin-bottom: 5px;
+}
+
+.number-input {
+    width: 100%;
+    background: none;
+    border: none;
+    color: #FFF;
+    font-size: 1.1rem;
+    font-weight: 600;
+    outline: none;
+}
+
+.algo-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-bottom: 30px;
+}
+
+.algo-item {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--glass-border);
+    border-radius: 12px;
+    padding: 15px 10px;
+    text-align: center;
+    cursor: pointer;
+    transition: var(--transition-smooth);
+}
+
+.algo-item.active {
+    background: rgba(255, 215, 0, 0.1);
+    border-color: var(--primary-gold);
+    transform: translateY(-2px);
+}
+
+.algo-icon {
+    font-size: 1.5rem;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.algo-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.generate-button {
+    width: 100%;
+    padding: 20px;
+    background: linear-gradient(135deg, var(--primary-gold), #FFB800);
+    border: none;
+    border-radius: var(--radius-md);
+    color: #000;
+    font-size: 1.1rem;
+    font-weight: 800;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    box-shadow: 0 10px 30px rgba(255, 215, 0, 0.3);
+    transition: var(--transition-smooth);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.generate-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 40px rgba(255, 215, 0, 0.4);
+}
+
+.generate-button:active {
+    transform: translateY(0);
+}
+
+/* Results Display Area */
+.results-list {
+    margin-top: 30px;
+}
+
+.ticket-item {
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: var(--radius-md);
+    padding: 20px;
+    margin-bottom: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    animation: slideUp 0.4s ease;
+}
+
+/* Trust Indicators */
+.trust-indicators {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 20px;
+}
+
+.trust-badge {
+    font-size: 0.65rem;
+    padding: 4px 10px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--glass-border);
+    border-radius: 100px;
+    color: var(--primary-gold);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Share Button */
+.share-btn {
+    background: rgba(255, 215, 0, 0.1);
+    border: 1px solid var(--primary-gold);
+    color: var(--primary-gold);
+    padding: 12px 25px;
+    border-radius: 100px;
+    font-weight: 800;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: var(--transition-smooth);
+}
+
+.share-btn:hover {
+    background: var(--primary-gold);
+    color: #000;
+}
+
+/* Banner Section */
+.app-banner-area {
+    position: relative;
+    width: 100%;
+    height: 180px;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    margin-bottom: 25px;
+    box-shadow: var(--shadow-premium);
+}
+
+.hero-banner {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.banner-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to top, var(--bg-dark), transparent);
+    z-index: 1;
+}
+
+/* Official Links */
+.official-links {
+    margin-top: 15px;
+}
+
+.official-btn {
+    display: inline-block;
+    padding: 8px 16px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--glass-border);
+    color: var(--text-dim);
+    text-decoration: none;
+    font-size: 0.7rem;
+    border-radius: 100px;
+    transition: var(--transition-smooth);
+}
+
+.official-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--primary-gold);
+    border-color: var(--primary-gold);
+}
+
+/* Draw Rules Subtitle */
+.draw-rules-info {
+    text-align: center;
+    margin-top: 10px;
+    font-size: 0.75rem;
+    color: var(--text-dim);
+    font-weight: 500;
+}
+
+/* Special Ball Label */
+.ball.special::before,
+.ball.mega::before {
+    content: attr(data-label);
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.6rem;
+    background: inherit;
+    padding: 2px 5px;
+    border-radius: 4px;
+    color: #FFF;
+    font-weight: 800;
+    white-space: nowrap;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Stats & Charts */
+.stats-card,
+.simulator-card {
+    padding: 25px;
+    margin-bottom: 30px;
+}
+
+.stats-overview {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.stat-box {
+    text-align: center;
+}
+
+.stat-bar-container {
+    width: 100%;
+    height: 8px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 4px;
+    margin: 8px 0;
+    overflow: hidden;
+}
+
+.stat-bar {
+    height: 100%;
+    background: var(--primary-gold);
+    border-radius: 4px;
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.glass-select {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    outline: none;
+    cursor: pointer;
+}
+
+.glass-select option {
+    background: #000;
+}
+
+/* Full Frequency Grid */
+.full-stats-toggle {
+    margin-top: 25px;
+    text-align: center;
+}
+
+/* --- Refined Lotto Predictor Styles --- */
+.setup-compact-grid {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 25px;
+    justify-content: space-between;
+}
+
+.setup-tile {
+    flex: 1;
+    min-width: 0;
+    /* Prevents overflow */
+}
+
+@media (max-width: 500px) {
+    .setup-compact-grid {
+        flex-direction: column;
+        gap: 15px;
+    }
+}
+
+.setup-tile label {
+    display: block;
+    font-size: 0.7rem;
+    color: var(--text-dim);
+    margin-bottom: 5px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.slim-counter {
+    display: flex;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    height: 38px;
+    justify-content: space-between;
+}
+
+.slim-counter button {
+    width: 30px;
+    height: 100%;
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.2rem;
+    cursor: pointer;
+}
+
+.slim-counter input {
+    flex: 1;
+    background: none;
+    border: none;
+    text-align: center;
+    color: white;
+    font-weight: 700;
+    width: 30px;
+}
+
+.slim-input {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    padding: 10px;
+    color: white;
+    font-size: 0.85rem;
+    height: 38px;
+}
+
+.algo-grid-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin-top: 15px;
+}
+
+.algo-grid-item,
+.algo-item {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+    padding: 12px 5px;
+    text-align: center;
+    cursor: pointer;
+    font-size: 0.7rem;
+    color: var(--text-dim);
+    transition: 0.3s;
+}
+
+.algo-grid-item.active,
+.algo-item.active {
+    background: rgba(255, 215, 0, 0.1);
+    border-color: var(--primary-gold);
+    color: white;
+}
+
+.generate-btn-premium {
+    width: 100%;
+    margin-top: 25px;
+    padding: 18px;
+    background: linear-gradient(135deg, var(--primary-gold), #FFD700);
+    border: none;
+    border-radius: 12px;
+    color: #000;
+    font-weight: 800;
+    font-size: 1rem;
+    cursor: pointer;
+    box-shadow: 0 4px 20px rgba(212, 175, 55, 0.3);
+}
+
+/* Fix Frequency Bars Visibility */
+.freq-bars {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    height: 120px;
+    /* 고정 높이 부여 */
+    margin-top: 20px;
+    gap: 4px;
+}
+
+.freq-bar-item {
+    flex: 1;
+    background: linear-gradient(to top, var(--primary-gold), rgba(255, 215, 0, 0.2));
+    border-radius: 4px 4px 0 0;
+    position: relative;
+    min-width: 15px;
+}
+
+.freq-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 8px;
+    margin-top: 20px;
+}
+
+@media (max-width: 480px) {
+    .freq-grid {
+        grid-template-columns: repeat(5, 1fr);
+    }
+}
+
+.freq-item {
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 12px;
+    padding: 8px 4px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+}
+
+.freq-item .num {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--primary-gold);
+}
+
+.freq-item .count {
+    font-size: 0.6rem;
+    color: var(--text-dim);
+}
+
+.freq-item.hot {
+    background: rgba(255, 215, 0, 0.1);
+}
+
+.freq-item.cold {
+    background: rgba(255, 255, 255, 0.01);
+}
+
+.freq-bars {
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    gap: 5px;
+    height: 100px;
+    align-items: flex-end;
+    margin-top: 15px;
+}
+
+.freq-bar-item {
+    background: linear-gradient(to top, var(--primary-gold), transparent);
+    width: 100%;
+    border-radius: 4px 4px 0 0;
+    position: relative;
+}
+
+.freq-bar-item::after {
+    content: attr(data-val);
+    position: absolute;
+    bottom: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.55rem;
+    color: var(--text-dim);
+}
+
+/* Simulator */
+.sim-controls {
+    margin-top: 15px;
+    text-align: center;
+}
+
+.sim-btn {
+    background: none;
+    border: 1px solid var(--primary-gold);
+    color: var(--primary-gold);
+    padding: 10px 20px;
+    border-radius: 100px;
+    font-size: 0.75rem;
+    font-weight: 800;
+    cursor: pointer;
+    transition: var(--transition-smooth);
+}
+
+.sim-btn:hover {
+    background: var(--primary-gold);
+    color: #000;
+}
+
+.sim-result {
+    margin-top: 15px;
+    min-height: 40px;
+    font-size: 0.8rem;
+    line-height: 1.5;
+    color: var(--text-dim);
+}
+
+.ad-label {
+    position: absolute;
+    top: 5px;
+    left: 10px;
+    font-size: 0.6rem;
+    color: rgba(255, 255, 255, 0.2);
+    font-weight: 700;
+}
+
+.ticket-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    padding-bottom: 10px;
+}
+
+.ticket-no {
+    font-size: 0.75rem;
+    color: var(--text-dim);
+    font-weight: 600;
+}
+
+.ticket-score {
+    font-size: 0.75rem;
+    color: var(--primary-gold);
+    font-weight: 700;
+}
+
+.setup-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr 1.5fr;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+@media (max-width: 600px) {
+    .setup-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.setup-item label {
+    display: block;
+    font-size: 0.7rem;
+    color: var(--text-dim);
+    margin-bottom: 6px;
+    font-weight: 600;
+}
+
+.glass-input {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    padding: 10px;
+    color: white;
+    font-size: 0.85rem;
+}
+
+/* Footer & Monetization */
+.ad-slot {
+    width: 100%;
+    min-height: 100px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: var(--radius-md);
+    margin: 40px 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-dim);
+    border: 1px dashed var(--glass-border);
+}
+
+.footer {
+    text-align: center;
+    padding: 40px 0;
+    color: var(--text-dim);
+    font-size: 0.85rem;
+}
+
+.footer-links {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.footer-links a {
+    color: var(--text-dim);
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.footer-links a:hover {
+    color: #FFF;
+}
+
+.disclaimer {
+    max-width: 400px;
+    margin: 0 auto;
+    line-height: 1.4;
+    font-size: 0.75rem;
+    opacity: 0.6;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+    .app-wrapper {
+        padding: 15px;
+    }
+
+    .jackpot-amount {
+        font-size: 2.2rem;
+    }
+
+    .ball {
+        width: 40px;
+        height: 40px;
+        font-size: 0.95rem;
+    }
+
+    .algo-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
