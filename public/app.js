@@ -116,10 +116,15 @@ async function loadHistory() {
     // 3. Parallel Execution (Harnessing)
     const [cloud, local] = await Promise.all([fetchCloud(), fetchLocal()]);
 
-    // 4. Safe Merge Logic
-    const safeMerge = (cloudArr, localArr) => {
+    // 4. Safe Merge Logic (Preserves existing hardcoded data)
+    const safeMerge = (currentArr, cloudArr, localArr) => {
         const map = new Map();
-        const combined = [...(Array.isArray(cloudArr) ? cloudArr : []), ...(Array.isArray(localArr) ? localArr : [])];
+        // Combined all three: Hardcoded + Cloud + Local
+        const combined = [
+            ...(Array.isArray(currentArr) ? currentArr : []),
+            ...(Array.isArray(cloudArr) ? cloudArr : []),
+            ...(Array.isArray(localArr) ? localArr : [])
+        ];
 
         combined.forEach(item => {
             if (item && item.date) {
@@ -130,8 +135,8 @@ async function loadHistory() {
         return Array.from(map.values()).sort((a, b) => new Date(b.date) - new Date(a.date));
     };
 
-    historyData.power = safeMerge(cloud.pb, local.pb);
-    historyData.mega = safeMerge(cloud.mm, local.mm);
+    historyData.power = safeMerge(historyData.power, cloud.pb, local.pb);
+    historyData.mega = safeMerge(historyData.mega, cloud.mm, local.mm);
 
     console.log(`✅ Data Harness Complete. PB: ${historyData.power.length}, MM: ${historyData.mega.length}`);
 
