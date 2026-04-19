@@ -48,47 +48,83 @@ document.addEventListener('DOMContentLoaded', async () => {
     setInterval(updateCountdown, 1000);
 });
 
+/**
+ * --- Resilience Harness: Robust Data Loading ---
+ * Ensures the app works even if some sources fail.
+ */
 async function loadHistory() {
-    let fbSuccess = false;
-    // 1. Firebase Firestore Sync
-    if (typeof firebase !== 'undefined' && firebase.apps.length > 0) {
+    console.log('🛡️ Data Harness: Initializing fetch sequence...');
+
+    // 1. Independent Firestore Fetcher
+    const fetchCloud = async () => {
         try {
+            if (typeof firebase === 'undefined' || !firebase.apps.length) {
+                console.log('ℹ️ Firebase not initialized, skipping cloud fetch.');
+                return { pb: [], mm: [] };
+            }
             const db = firebase.firestore();
             const [pbSnap, mmSnap] = await Promise.all([
-                db.collection('pb_history').orderBy('date', 'desc').get(),
-                db.collection('mm_history').orderBy('date', 'desc').get()
+                db.collection('pb_history').orderBy('date', 'desc').limit(50).get(),
+                db.collection('mm_history').orderBy('date', 'desc').limit(50).get()
             ]);
-            historyData.power = pbSnap.docs.map(doc => doc.data());
-            historyData.mega = mmSnap.docs.map(doc => doc.data());
-            fbSuccess = historyData.power.length > 0;
+            return {
+                pb: pbSnap.docs.map(doc => doc.data()),
+                mm: mmSnap.docs.map(doc => doc.data())
+            };
         } catch (e) {
-            console.warn('[Data] Cloud sync failed:', e.message);
+            console.warn('⚠️ Cloud Harness: Firestore bypassed due to error.', e);
+            return { pb: [], mm: [] };
         }
-    }
+    };
 
-    // 2. Hybrid Merge (Cloud + Local Fallback)
-    try {
-        const [pbLocal, mmLocal] = await Promise.all([
-            fetch('/data/powerball_history.json').then(r => r.json()),
-            fetch('/data/megamillions_history.json').then(r => r.json())
-        ]);
+    // 2. Independent Local JSON Fetcher
+    const fetchLocal = async () => {
+        try {
+            // Use absolute paths and handle non-ok responses
+            const pbRes = await fetch('/data/powerball_history.json').catch(() => null);
+            const mmRes = await fetch('/data/megamillions_history.json').catch(() => null);
 
-        const merge = (fbArr, localArr) => {
-            const map = new Map();
-            [...fbArr, ...localArr].forEach(d => map.set(d.date, d));
-            return Array.from(map.values()).sort((a, b) => new Date(b.date) - new Date(a.date));
-        };
+            const pbData = (pbRes && pbRes.ok) ? await pbRes.json() : [];
+            const mmData = (mmRes && mmRes.ok) ? await mmRes.json() : [];
 
-        historyData.power = merge(historyData.power, pbLocal);
-        historyData.mega = merge(historyData.mega, mmLocal);
-    } catch (e) {
-        console.warn('[Data] Local merge failed:', e);
-    }
+            return { pb: pbData, mm: mmData };
+        } catch (e) {
+            console.warn('⚠️ Local Harness: JSON files bypassed.', e);
+            return { pb: [], mm: [] };
+        }
+    };
 
-    // Final Setup
+    // 3. Parallel Execution (Harnessing)
+    const [cloud, local] = await Promise.all([fetchCloud(), fetchLocal()]);
+
+    // 4. Safe Merge Logic
+    const safeMerge = (cloudArr, localArr) => {
+        const map = new Map();
+        const combined = [...(Array.isArray(cloudArr) ? cloudArr : []), ...(Array.isArray(localArr) ? localArr : [])];
+
+        combined.forEach(item => {
+            if (item && item.date) {
+                map.set(item.date, item);
+            }
+        });
+
+        return Array.from(map.values()).sort((a, b) => new Date(b.date) - new Date(a.date));
+    };
+
+    historyData.power = safeMerge(cloud.pb, local.pb);
+    historyData.mega = safeMerge(cloud.mm, local.mm);
+
+    console.log(`✅ Data Harness Complete. PB: ${historyData.power.length}, MM: ${historyData.mega.length}`);
+
+    // 5. Initial UI Render
     calculateFrequencies('power');
     calculateFrequencies('mega');
     updateRecentResults('power', true);
+
+    // If no data at all, show a console warning
+    if (historyData.power.length === 0 && historyData.mega.length === 0) {
+        console.error('🛑 Critical: No history data available from any source!');
+    }
 }
 
 function getDrawNumbers(draw) {
