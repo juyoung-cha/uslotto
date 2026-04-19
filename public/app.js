@@ -98,7 +98,7 @@ const FALLBACK_DATA = {
         { "date": "2026-04-06", "numbers": [7, 24, 37, 42, 57], "special": 5, "multiplier": 2 }
     ],
     mega: [
-        { "date": "2026-04-17", "numbers": [1, 2, 3, 4, 5], "special": 6 }, // Placeholder if not fetched
+        { "date": "2026-04-17", "numbers": [14, 30, 44, 54, 58], "special": 9, "multiplier": 3 },
         { "date": "2026-04-14", "numbers": [38, 43, 44, 49, 62], "special": 8 },
         { "date": "2026-04-10", "numbers": [2, 10, 31, 44, 57], "special": 10 },
         { "date": "2026-04-07", "numbers": [3, 33, 42, 52, 65], "special": 17 },
