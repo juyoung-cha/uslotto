@@ -8,17 +8,17 @@ const { exec } = require('child_process');
 const app = express();
 app.use(express.json());
 app.use(cors());
-app.use(express.static('.')); // Serve static files (index.html, style.css, etc.)
 const PORT = process.env.PORT || 3000;
-
-// 정적 파일 서빙 (최상단 우선순위)
-app.use(express.static(__dirname));
+// 정적 파일 서빙 (public 폴더를 루트로 설정)
+app.use(express.static(path.join(__dirname, 'public')));
 
 // 모든 경로를 index.html로 리다이렉트 (SPA 방식)
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'index.html'));
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
-app.use('/data', express.static(path.join(__dirname, 'data')));
+
+// /data 경로를 public/data로 연결
+app.use('/data', express.static(path.join(__dirname, 'public', 'data')));
 
 // --- 데이터 업데이트 자동화 로직 ---
 const runCrawler = () => {
