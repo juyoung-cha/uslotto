@@ -5,18 +5,12 @@
  */
 
 // --- Configuration ---
-// --- Force Refresh & Cache Busting for PWA ---
+// --- Service Worker Registration for PWA ---
 if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.getRegistrations().then(function (registrations) {
-        for (let registration of registrations) {
-            registration.unregister();
-        }
-    });
-}
-// Clear all caches for the current site
-if ('caches' in window) {
-    caches.keys().then(function (names) {
-        for (let name of names) caches.delete(name);
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+            .then(reg => console.log('🚀 Service Worker registered:', reg.scope))
+            .catch(err => console.warn('❌ Service Worker failed:', err));
     });
 }
 
