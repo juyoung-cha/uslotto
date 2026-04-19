@@ -20,27 +20,35 @@ const installContainer = document.getElementById('pwaInstallContainer');
 const installBtn = document.getElementById('pwaInstallBtn');
 const closeBtn = document.getElementById('pwaCloseBtn');
 
+// Helper to check if it's already installed
+const isPWA = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+
+// Show the toast if not already installed (Force show for visibility)
+if (!isPWA && installContainer) {
+    setTimeout(() => {
+        installContainer.style.display = 'block';
+    }, 2000);
+}
+
 window.addEventListener('beforeinstallprompt', (e) => {
-    // Prevent the mini-infobar from appearing on mobile
     e.preventDefault();
-    // Stash the event so it can be triggered later.
     deferredPrompt = e;
-    // Update UI notify the user they can install the PWA
-    if (installContainer) installContainer.style.display = 'block';
 });
 
 if (installBtn) {
     installBtn.addEventListener('click', async () => {
-        if (!deferredPrompt) return;
-        // Show the install prompt
-        deferredPrompt.prompt();
-        // Wait for the user to respond to the prompt
-        const { outcome } = await deferredPrompt.userChoice;
-        console.log(`👤 User response to install prompt: ${outcome}`);
-        // We've used the prompt, and can't use it again, throw it away
-        deferredPrompt = null;
-        // Hide the install UI
-        if (installContainer) installContainer.style.display = 'none';
+        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+
+        if (isIOS) {
+            alert('iPhone/iPad: Tap the "Share" button in Safari and choose "Add to Home Screen" 📲');
+        } else if (deferredPrompt) {
+            deferredPrompt.prompt();
+            const { outcome } = await deferredPrompt.userChoice;
+            deferredPrompt = null;
+            if (installContainer) installContainer.style.display = 'none';
+        } else {
+            alert('To install: Open browser menu (⋮) and select "Install App" or "Add to Home screen"');
+        }
     });
 }
 
