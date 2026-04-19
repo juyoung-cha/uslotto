@@ -356,6 +356,19 @@
             document.getElementById('premiumModal').style.display = 'none';
         }
     </script>
+
+    <!-- PWA Installation Toast (Floating) -->
+    <div id="pwaInstallContainer" class="pwa-toast" style="display: none;">
+        <div class="toast-content">
+            <span class="toast-icon">📱</span>
+            <div class="toast-text">
+                <strong>Install US Lotto Master</strong>
+                <p>Add to home screen for fast access</p>
+            </div>
+            <button id="pwaInstallBtn" class="install-action-btn">Install</button>
+            <button id="pwaCloseBtn" class="close-btn">×</button>
+        </div>
+    </div>
 </body>
 
 </html>

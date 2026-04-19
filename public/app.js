@@ -16,46 +16,51 @@ if ('serviceWorker' in navigator) {
 
 // --- Manual PWA Install Logic ---
 let deferredPrompt;
-const installContainer = document.getElementById('pwaInstallContainer');
-const installBtn = document.getElementById('pwaInstallBtn');
-const closeBtn = document.getElementById('pwaCloseBtn');
-
-// Helper to check if it's already installed
-const isPWA = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
-
-// Show the toast if not already installed (Force show for visibility)
-if (!isPWA && installContainer) {
-    setTimeout(() => {
-        installContainer.style.display = 'block';
-    }, 2000);
-}
+const pwaState = {
+    installContainer: null,
+    installBtn: null,
+    closeBtn: null
+};
 
 window.addEventListener('beforeinstallprompt', (e) => {
     e.preventDefault();
     deferredPrompt = e;
 });
 
-if (installBtn) {
-    installBtn.addEventListener('click', async () => {
-        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+function initPWAInstall() {
+    pwaState.installContainer = document.getElementById('pwaInstallContainer');
+    pwaState.installBtn = document.getElementById('pwaInstallBtn');
+    pwaState.closeBtn = document.getElementById('pwaCloseBtn');
 
-        if (isIOS) {
-            alert('iPhone/iPad: Tap the "Share" button in Safari and choose "Add to Home Screen" 📲');
-        } else if (deferredPrompt) {
-            deferredPrompt.prompt();
-            const { outcome } = await deferredPrompt.userChoice;
-            deferredPrompt = null;
-            if (installContainer) installContainer.style.display = 'none';
-        } else {
-            alert('To install: Open browser menu (⋮) and select "Install App" or "Add to Home screen"');
-        }
-    });
-}
+    const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
 
-if (closeBtn) {
-    closeBtn.addEventListener('click', () => {
-        if (installContainer) installContainer.style.display = 'none';
-    });
+    if (!isStandalone && pwaState.installContainer) {
+        setTimeout(() => {
+            pwaState.installContainer.style.display = 'block';
+        }, 1500);
+    }
+
+    if (pwaState.installBtn) {
+        pwaState.installBtn.addEventListener('click', async () => {
+            const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+            if (isIOS) {
+                alert('iPhone/iPad: Tap the "Share" button in Safari and choose "Add to Home Screen" 📲');
+            } else if (deferredPrompt) {
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+                deferredPrompt = null;
+                pwaState.installContainer.style.display = 'none';
+            } else {
+                alert('To install: Open browser menu (⋮) and select "Install App" or "Add to Home screen"');
+            }
+        });
+    }
+
+    if (pwaState.closeBtn) {
+        pwaState.closeBtn.addEventListener('click', () => {
+            pwaState.installContainer.style.display = 'none';
+        });
+    }
 }
 
 const CONFIG = {
@@ -106,6 +111,7 @@ let frequencies = { power: { main: {}, special: {} }, mega: { main: {}, special:
 
 // --- Initialization ---
 document.addEventListener('DOMContentLoaded', async () => {
+    initPWAInstall(); // Initialize PWA Install UI
     await loadHistory();
     switchLotto('power'); // Default
     setInterval(updateCountdown, 1000);
