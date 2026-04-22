@@ -1,7 +1,7 @@
 {
   "name": "US Lotto Master - Powerball & Mega Millions PREDICTIONS",
   "short_name": "US Lotto Master",
-  "start_url": "/index.html",
+  "start_url": "/",
   "display": "standalone",
   "background_color": "#0A0A0F",
   "theme_color": "#FFD700",

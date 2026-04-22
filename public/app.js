@@ -25,6 +25,11 @@ const pwaState = {
 window.addEventListener('beforeinstallprompt', (e) => {
     e.preventDefault();
     deferredPrompt = e;
+    // Show install button only after event is captured
+    const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+    if (!isStandalone && pwaState.installContainer) {
+        pwaState.installContainer.style.display = 'block';
+    }
 });
 
 function initPWAInstall() {
@@ -32,9 +37,11 @@ function initPWAInstall() {
     pwaState.installBtn = document.getElementById('pwaInstallBtn');
     pwaState.closeBtn = document.getElementById('pwaCloseBtn');
 
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
     const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
 
-    if (!isStandalone && pwaState.installContainer) {
+    // Show for iOS immediately as they don't trigger beforeinstallprompt
+    if (isIOS && !isStandalone && pwaState.installContainer) {
         setTimeout(() => {
             pwaState.installContainer.style.display = 'block';
         }, 1500);
@@ -42,16 +49,22 @@ function initPWAInstall() {
 
     if (pwaState.installBtn) {
         pwaState.installBtn.addEventListener('click', async () => {
-            const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
             if (isIOS) {
                 alert('iPhone/iPad: Tap the "Share" button in Safari and choose "Add to Home Screen" 📲');
-            } else if (deferredPrompt) {
-                deferredPrompt.prompt();
-                const { outcome } = await deferredPrompt.userChoice;
-                deferredPrompt = null;
                 pwaState.installContainer.style.display = 'none';
+            } else if (deferredPrompt) {
+                try {
+                    deferredPrompt.prompt();
+                    const { outcome } = await deferredPrompt.userChoice;
+                    console.log(`User installation choice: ${outcome}`);
+                    deferredPrompt = null;
+                    pwaState.installContainer.style.display = 'none';
+                } catch (err) {
+                    console.error('Installation failed:', err);
+                    alert('Installation failed. Please try via browser menu.');
+                }
             } else {
-                alert('To install: Open browser menu (⋮) and select "Install App" or "Add to Home screen"');
+                alert('Installation prompt is not ready. Please try again in a few seconds or use browser menu "Install App".');
             }
         });
     }
