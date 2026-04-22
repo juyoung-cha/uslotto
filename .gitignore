@@ -3,8 +3,12 @@
 
 # Node.js
 node_modules/
+
+# Logs
 npm-debug.log
 yarn-error.log
+.playwright-mcp/
+*.log
 
 # Firebase & Secrets (Security Critical)
 serviceAccountKey.json
@@ -15,11 +19,9 @@ service-account.json
 .env.test.local
 .env.production.local
 
-# Backups & Data
+# Backups
 backup_*.zip
 backup_*/
-data/
-public/data/
 
 # OS Files
 .DS_Store

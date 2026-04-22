@@ -131,17 +131,20 @@ async function loadHistory() {
                 console.log('ℹ️ Firebase not initialized, skipping cloud fetch.');
                 return { pb: [], mm: [] };
             }
+            console.log('📡 Cloud Harness: Fetching Firestore data...');
             const db = firebase.firestore();
             const [pbSnap, mmSnap] = await Promise.all([
                 db.collection('pb_history').orderBy('date', 'desc').limit(50).get(),
                 db.collection('mm_history').orderBy('date', 'desc').limit(50).get()
             ]);
-            return {
-                pb: pbSnap.docs.map(doc => doc.data()),
-                mm: mmSnap.docs.map(doc => doc.data())
-            };
+
+            const pb = pbSnap.docs.map(doc => doc.data());
+            const mm = mmSnap.docs.map(doc => doc.data());
+
+            console.log(`☁️ Cloud Data: PB(${pb.length}), MM(${mm.length})`);
+            return { pb, mm };
         } catch (e) {
-            console.warn('⚠️ Cloud Harness: Firestore bypassed due to error.', e);
+            console.error('❌ Cloud Harness: Firestore bypassed due to error.', e.message);
             return { pb: [], mm: [] };
         }
     };
@@ -149,16 +152,26 @@ async function loadHistory() {
     // 2. Independent Local JSON Fetcher
     const fetchLocal = async () => {
         try {
-            // Use absolute paths and handle non-ok responses
-            const pbRes = await fetch('/data/powerball_history.json').catch(() => null);
-            const mmRes = await fetch('/data/megamillions_history.json').catch(() => null);
+            console.log('📡 Local Harness: Fetching JSON files...');
+            const pbRes = await fetch('/data/powerball_history.json').catch(err => {
+                console.error('❌ Local PB fetch failed:', err);
+                return null;
+            });
+            const mmRes = await fetch('/data/megamillions_history.json').catch(err => {
+                console.error('❌ Local MM fetch failed:', err);
+                return null;
+            });
+
+            if (pbRes && !pbRes.ok) console.warn(`⚠️ Local PB API returned ${pbRes.status}`);
+            if (mmRes && !mmRes.ok) console.warn(`⚠️ Local MM API returned ${mmRes.status}`);
 
             const pbData = (pbRes && pbRes.ok) ? await pbRes.json() : [];
             const mmData = (mmRes && mmRes.ok) ? await mmRes.json() : [];
 
+            console.log(`📂 Local Data: PB(${pbData.length}), MM(${mmData.length})`);
             return { pb: pbData, mm: mmData };
         } catch (e) {
-            console.warn('⚠️ Local Harness: JSON files bypassed.', e);
+            console.error('❌ Local Harness: JSON files bypassed.', e);
             return { pb: [], mm: [] };
         }
     };

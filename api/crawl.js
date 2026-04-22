@@ -23,16 +23,27 @@ async function fetchData(url) {
         https.get(url, (res) => {
             let data = '';
             res.on('data', (chunk) => data += chunk);
-            res.on('end', () => resolve(JSON.parse(data)));
+            res.on('end', () => {
+                try {
+                    if (res.statusCode !== 200) {
+                        return reject(new Error(`API responded with status ${res.statusCode}`));
+                    }
+                    resolve(JSON.parse(data));
+                } catch (e) {
+                    reject(new Error(`Failed to parse JSON from ${url}: ${e.message}`));
+                }
+            });
             res.on('error', (err) => reject(err));
-        });
+        }).on('error', (err) => reject(err));
     });
 }
 
 export default async function handler(req, res) {
     // Vercel Cron Secret 확인 (보안)
-    if (req.headers.authorization !== `Bearer ${process.env.CRON_SECRET}`) {
-        return res.status(401).end('Unauthorized');
+    // CRON_SECRET이 설정되어 있지 않은 경우를 대비한 유연한 처리
+    const cronSecret = process.env.CRON_SECRET;
+    if (cronSecret && req.headers.authorization !== `Bearer ${cronSecret}`) {
+        return res.status(401).end('Unauthorized - Secret Mismatch');
     }
 
     try {
@@ -40,11 +51,18 @@ export default async function handler(req, res) {
 
         // 1. Powerball 업데이트
         const pbRaw = await fetchData(POWERBALL_URL);
+        if (!Array.isArray(pbRaw)) throw new Error('Powerball API did not return an array');
+
         const pbBatch = db.batch();
+        let pbCount = 0;
+
         pbRaw.forEach(row => {
-            if (!row.winning_numbers) return;
+            if (!row.winning_numbers || !row.draw_date) return;
             const date = row.draw_date.split('T')[0];
             const allNums = row.winning_numbers.trim().split(/\s+/);
+
+            if (allNums.length < 6) return; // Basic validation
+
             const docRef = db.collection('pb_history').doc(date);
             pbBatch.set(docRef, {
                 date,
@@ -52,16 +70,23 @@ export default async function handler(req, res) {
                 special: Number(allNums[5]),
                 multiplier: row.multiplier ? Number(row.multiplier) : null
             }, { merge: true });
+            pbCount++;
         });
-        await pbBatch.commit();
+
+        if (pbCount > 0) await pbBatch.commit();
 
         // 2. Mega Millions 업데이트
         const mmRaw = await fetchData(MEGAMILLIONS_URL);
+        if (!Array.isArray(mmRaw)) throw new Error('Mega Millions API did not return an array');
+
         const mmBatch = db.batch();
+        let mmCount = 0;
+
         mmRaw.forEach(row => {
-            if (!row.winning_numbers) return;
+            if (!row.winning_numbers || !row.draw_date) return;
             const date = row.draw_date.split('T')[0];
             const allNums = row.winning_numbers.trim().split(/\s+/);
+
             const docRef = db.collection('mm_history').doc(date);
             mmBatch.set(docRef, {
                 date,
@@ -69,10 +94,13 @@ export default async function handler(req, res) {
                 special: Number(row.mega_ball),
                 multiplier: row.multiplier ? Number(row.multiplier) : null
             }, { merge: true });
+            mmCount++;
         });
-        await mmBatch.commit();
 
-        res.status(200).json({ success: true, message: 'Crawl and Sync completed' });
+        if (mmCount > 0) await mmBatch.commit();
+
+        console.log(`✅ Sync completed: PB(${pbCount}), MM(${mmCount})`);
+        res.status(200).json({ success: true, message: 'Crawl and Sync completed', stats: { pb: pbCount, mm: mmCount } });
     } catch (error) {
         console.error('❌ Crawl failed:', error);
         res.status(500).json({ success: false, error: error.message });
