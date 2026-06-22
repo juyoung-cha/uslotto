@@ -1,5 +1,209 @@
 [
   {
+    "date": "2026-06-19",
+    "numbers": [
+      13,
+      16,
+      21,
+      26,
+      50
+    ],
+    "special": 12,
+    "multiplier": null
+  },
+  {
+    "date": "2026-06-16",
+    "numbers": [
+      12,
+      20,
+      53,
+      67,
+      70
+    ],
+    "special": 12,
+    "multiplier": null
+  },
+  {
+    "date": "2026-06-12",
+    "numbers": [
+      9,
+      17,
+      24,
+      39,
+      51
+    ],
+    "special": 3,
+    "multiplier": null
+  },
+  {
+    "date": "2026-06-09",
+    "numbers": [
+      9,
+      30,
+      36,
+      38,
+      40
+    ],
+    "special": 3,
+    "multiplier": null
+  },
+  {
+    "date": "2026-06-05",
+    "numbers": [
+      13,
+      30,
+      50,
+      52,
+      66
+    ],
+    "special": 2,
+    "multiplier": null
+  },
+  {
+    "date": "2026-06-02",
+    "numbers": [
+      15,
+      26,
+      43,
+      48,
+      60
+    ],
+    "special": 12,
+    "multiplier": null
+  },
+  {
+    "date": "2026-05-29",
+    "numbers": [
+      19,
+      24,
+      47,
+      59,
+      65
+    ],
+    "special": 7,
+    "multiplier": null
+  },
+  {
+    "date": "2026-05-26",
+    "numbers": [
+      1,
+      5,
+      49,
+      51,
+      59
+    ],
+    "special": 7,
+    "multiplier": null
+  },
+  {
+    "date": "2026-05-22",
+    "numbers": [
+      3,
+      22,
+      34,
+      54,
+      61
+    ],
+    "special": 8,
+    "multiplier": null
+  },
+  {
+    "date": "2026-05-19",
+    "numbers": [
+      10,
+      26,
+      34,
+      56,
+      64
+    ],
+    "special": 6,
+    "multiplier": null
+  },
+  {
+    "date": "2026-05-15",
+    "numbers": [
+      17,
+      23,
+      25,
+      52,
+      61
+    ],
+    "special": 3,
+    "multiplier": null
+  },
+  {
+    "date": "2026-05-12",
+    "numbers": [
+      17,
+      32,
+      35,
+      40,
+      47
+    ],
+    "special": 17,
+    "multiplier": null
+  },
+  {
+    "date": "2026-05-08",
+    "numbers": [
+      37,
+      47,
+      49,
+      51,
+      58
+    ],
+    "special": 16,
+    "multiplier": null
+  },
+  {
+    "date": "2026-05-05",
+    "numbers": [
+      12,
+      22,
+      50,
+      51,
+      55
+    ],
+    "special": 10,
+    "multiplier": null
+  },
+  {
+    "date": "2026-05-01",
+    "numbers": [
+      16,
+      21,
+      27,
+      41,
+      61
+    ],
+    "special": 24,
+    "multiplier": null
+  },
+  {
+    "date": "2026-04-28",
+    "numbers": [
+      14,
+      36,
+      41,
+      47,
+      66
+    ],
+    "special": 15,
+    "multiplier": null
+  },
+  {
+    "date": "2026-04-24",
+    "numbers": [
+      7,
+      16,
+      32,
+      35,
+      40
+    ],
+    "special": 12,
+    "multiplier": null
+  },
+  {
     "date": "2026-04-21",
     "numbers": [
       1,
