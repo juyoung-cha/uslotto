@@ -1,5 +1,17 @@
 [
   {
+    "date": "2026-06-23",
+    "numbers": [
+      48,
+      51,
+      60,
+      63,
+      66
+    ],
+    "special": 20,
+    "multiplier": null
+  },
+  {
     "date": "2026-06-19",
     "numbers": [
       13,
